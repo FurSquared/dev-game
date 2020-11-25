@@ -1,4 +1,5 @@
 __pycache__
+/static
 *.sqlite3
 *.swp
 *.pyc
