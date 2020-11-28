@@ -1,7 +1,8 @@
 from django.urls import path
 
-from . import views
+from .views import index, EnterCodeView
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', index, name='index'),
+    path('enter_code', EnterCodeView.as_view(), name='enter_code'),
 ]
