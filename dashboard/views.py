@@ -4,11 +4,16 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from dashboard.models import CollectedToken, Token
+from dashboard.models import CollectedReward, CollectedToken, Token
 
 @login_required
 def index(request):
-    return render(request, 'dashboard.html', {'user': request.user})
+  data = {
+    'user': request.user,
+    'collected_tokens': CollectedToken.objects.filter(user=request.user),
+    'collected_rewards': CollectedReward.objects.filter(user=request.user),
+  }
+  return render(request, 'dashboard.html', data)
 
 class EnterCodeView(View):
 
