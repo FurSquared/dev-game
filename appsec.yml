@@ -1,0 +1,16 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/backend
+  - source: server_configs/nginx/f2game.conf
+    destination: /etc/nginx/sites-available/
+    runas: ubuntu
+  - source: server_configs/systemctl/gunicorn.service
+    destination: /etc/systemd/system/
+    runas: ubuntu
+hooks:
+  BeforeInstall:
+      - location: server_configs/scripts/before_install.sh
+  AfterInstall:
+      - location: server_configs/scripts/after_install.sh

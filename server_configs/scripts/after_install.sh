@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Install libaries
+cd /var/www/backend
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --no-input
+
+# Set permission for all files
+sudo chown -R www-data:www-data /var/www/
+
+sudo ln -sf /etc/nginx/sites-available/f2game.conf /etc/nginx/sites-enabled
+
+# Restart services
+sudo systemctl restart gunicorn
+sudo systemctl restart nginx
