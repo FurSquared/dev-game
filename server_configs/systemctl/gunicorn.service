@@ -6,7 +6,7 @@ After=network.target
 User=www-data
 Group=www-data
 WorkingDirectory=/var/www/backend
-ExecStart=/var/www/backend/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/var/www/backend/f2game.sock f2game.wsgi:application
+ExecStart=/var/www/backend/venv/bin/gunicorn --env DJANGO_SETTINGS_MODULE=myproject.local_settings --access-logfile - --workers 3 --bind unix:/var/www/backend/f2game.sock f2game.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
