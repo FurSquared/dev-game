@@ -24,7 +24,8 @@ class EnterCodeView(View):
   @method_decorator(login_required)
   def post(self, request, *args, **kwargs):
     try:
-      token = Token.objects.get(code=request.POST.get('code', None))
+      code = request.POST.get('code', '').upper().replace("-", "_")
+      token = Token.objects.get(code=code)
 
       CollectedToken.objects.get_or_create(user=request.user, token=token)
     except Token.DoesNotExist as e:
