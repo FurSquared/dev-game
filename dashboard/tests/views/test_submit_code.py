@@ -49,6 +49,13 @@ class SubmitTokenTests(TestCase):
 
     self.assertEqual(collected_tokens.count(), 1)
 
+  def test_successful_code_strip_whitespace(self):
+    response = self.client.post('/dashboard/enter_code', {'code': " reward-only \n"})
+
+    collected_tokens = CollectedToken.objects.filter(user=self.user)
+
+    self.assertEqual(collected_tokens.count(), 1)
+
   def test_invalid_code(self):
     response = self.client.post('/dashboard/enter_code', {'code': "NOT_A_REAL_CODE"})
 
