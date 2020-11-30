@@ -4,6 +4,14 @@
 
 <p>Hello, <b>{{ user }}</b></p>
 
+<h1>Submit Code</h1>
+<form action="/dashboard/enter_code" method="post">
+  {% csrf_token %}
+  <label for="code">Code:</label>
+  <input id="code" type="text" name="code">
+  <input type="submit" value="Submit">
+</form>
+
 <h1>Retrieved Codes</h1>
 <ul>
   {% for token in collected_tokens %}
