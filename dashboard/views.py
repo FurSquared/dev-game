@@ -26,7 +26,7 @@ class EnterCodeView(View):
     try:
       token = Token.objects.get(code=request.POST.get('code', None))
 
-      CollectedToken.objects.create(user=request.user, token=token)
+      CollectedToken.objects.get_or_create(user=request.user, token=token)
     except Token.DoesNotExist as e:
       pass
 

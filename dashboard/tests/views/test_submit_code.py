@@ -34,6 +34,14 @@ class SubmitTokenTests(TestCase):
 
     self.assertEqual(collected_tokens.count(), 1)
 
+  def test_submit_code_twice(self):
+    self.client.post('/dashboard/enter_code', {'code': "REWARD_ONLY"})
+    self.client.post('/dashboard/enter_code', {'code': "REWARD_ONLY"})
+
+    collected_tokens = CollectedToken.objects.filter(user=self.user)
+
+    self.assertEqual(collected_tokens.count(), 1)
+
   def test_invalid_code(self):
     response = self.client.post('/dashboard/enter_code', {'code': "NOT_A_REAL_CODE"})
 
