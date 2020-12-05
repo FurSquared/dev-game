@@ -1,16 +1,15 @@
-{% extends "base.html" %}
+{% extends "base_with_nav.html" %}
 
 {% block content %}
 
-<p>Hello, <b>{{ user }}</b></p>
-
-<h1>Submit Code</h1>
-<form action="/dashboard/enter_code" method="post">
-  {% csrf_token %}
-  <label for="code">Code:</label>
-  <input id="code" type="text" name="code">
-  <input type="submit" value="Submit">
-</form>
+<div margin="0" class="box-in-left">
+  <h1>Submit A New Code:</h1>
+  <form action="/dashboard/enter_code" method="post">
+    {% csrf_token %}
+    <input type="text" class="input-block-level form-signin" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="code" placeholder="Code">
+    <button class="btn btn-large btn-primary" type="submit" value="login">Submit</button>
+  </form>
+</div>
 
 <h1>Retrieved Codes</h1>
 <ul>
