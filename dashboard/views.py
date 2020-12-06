@@ -30,7 +30,7 @@ class EnterCodeView(View):
             token = Token.objects.get(code=code)
 
             CollectedToken.objects.get_or_create(user=request.user, token=token)
-        except Token.DoesNotExist as e:
+        except Token.DoesNotExist:
             pass
 
         return redirect("index")

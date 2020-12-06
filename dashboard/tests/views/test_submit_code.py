@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 
-from dashboard.models import Token, CollectedToken, CollectedReward
+from dashboard.models import CollectedToken, CollectedReward
 
 
 class RequireLoginTests(TestCase):
@@ -30,7 +30,7 @@ class SubmitTokenTests(TestCase):
         self.client.login(username="testy", password="testy_pass")
 
     def test_successful_code(self):
-        response = self.client.post('/dashboard/enter_code', {'code': "REWARD_ONLY"})
+        self.client.post('/dashboard/enter_code', {'code': "REWARD_ONLY"})
 
         collected_tokens = CollectedToken.objects.filter(user=self.user)
 
@@ -45,21 +45,21 @@ class SubmitTokenTests(TestCase):
         self.assertEqual(collected_tokens.count(), 1)
 
     def test_successful_code_lowercase(self):
-        response = self.client.post('/dashboard/enter_code', {'code': "reward-only"})
+        self.client.post('/dashboard/enter_code', {'code': "reward-only"})
 
         collected_tokens = CollectedToken.objects.filter(user=self.user)
 
         self.assertEqual(collected_tokens.count(), 1)
 
     def test_successful_code_strip_whitespace(self):
-        response = self.client.post('/dashboard/enter_code', {'code': " reward-only \n"})
+        self.client.post('/dashboard/enter_code', {'code': " reward-only \n"})
 
         collected_tokens = CollectedToken.objects.filter(user=self.user)
 
         self.assertEqual(collected_tokens.count(), 1)
 
     def test_invalid_code(self):
-        response = self.client.post('/dashboard/enter_code', {'code': "NOT_A_REAL_CODE"})
+        self.client.post('/dashboard/enter_code', {'code': "NOT_A_REAL_CODE"})
 
         collected_tokens = CollectedToken.objects.filter(user=self.user)
 
