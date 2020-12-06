@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Token',
             fields=[
-                ('code', models.CharField(max_length=25, primary_key=True, serialize=False, validators=[django.core.validators.RegexValidator('^[0-9a-zA-Z_-]*$', 'Only alphanumeric, underscore, and dash are allowed.')])),
+                ('code', models.CharField(max_length=25, primary_key=True, serialize=False, validators=[django.core.validators.RegexValidator('^[0-9a-zA-Z_-]*$', 'Only alphanumeric, underscore, and dash are allowed.')])),  # noqa
                 ('gm_note', models.TextField(blank=True)),
                 ('reward_text', models.TextField(blank=True)),
                 ('valid_from', models.DateTimeField(blank=True, null=True)),
