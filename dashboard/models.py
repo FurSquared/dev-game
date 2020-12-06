@@ -40,7 +40,6 @@ class CollectedToken(models.Model):
             CollectedReward.objects.create(user=self.user, reward=reward)
 
         for reward in Reward.objects.exclude(id__in=user_rewards).filter(required_tokens__isnull=False).distinct():
-            collected_tokens = CollectedToken.objects.filter(user=self.user, token__in=reward.required_tokens.all())
             count = CollectedToken.objects.filter(user=self.user, token__in=reward.required_tokens.all()).count()
             if count == reward.required_tokens.count():
                 CollectedReward.objects.create(user=self.user, reward=reward)
