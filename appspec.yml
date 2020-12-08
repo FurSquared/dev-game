@@ -9,6 +9,9 @@ files:
   - source: server_configs/systemctl/gunicorn.service
     destination: /etc/systemd/system/
     runas: ubuntu
+  - source: server_configs/cron.d/
+    destination: /etc/cron.d
+    runas: root
 hooks:
   BeforeInstall:
       - location: server_configs/scripts/before_install.sh
