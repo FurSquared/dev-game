@@ -7,8 +7,8 @@ export DJANGO_SETTINGS_MODULE=f2game.local_settings
 cd /var/www/backend
 sudo ln -sf /var/www/prod_resources/local_settings.py /var/www/backend/f2game
 virtualenv -p python3 venv
-source venv/bin/activate
-pip install -r requirements.txt
+pipenv install
+pipenv shell
 python manage.py migrate
 python manage.py collectstatic --no-input
 
