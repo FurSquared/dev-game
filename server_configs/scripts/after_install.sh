@@ -6,8 +6,8 @@ export DJANGO_SETTINGS_MODULE=f2game.local_settings
 # Install libaries
 cd /var/www/backend
 sudo ln -sf /var/www/prod_resources/local_settings.py /var/www/backend/f2game
-sudo -u www-data pipenv install
-sudo -u www-data pipenv shell
+pipenv install
+pipenv shell
 python manage.py migrate
 python manage.py collectstatic --no-input
 
