@@ -7,9 +7,8 @@ export DJANGO_SETTINGS_MODULE=f2game.local_settings
 cd /var/www/backend
 sudo ln -sf /var/www/prod_resources/local_settings.py /var/www/backend/f2game
 pipenv install
-pipenv shell
-python manage.py migrate
-python manage.py collectstatic --no-input
+pipenv run python manage.py migrate
+pipenv run python manage.py collectstatic --no-input
 
 # Set permission for all files
 sudo chown -R www-data:www-data /var/www/
