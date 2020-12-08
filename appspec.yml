@@ -12,6 +12,14 @@ files:
   - source: server_configs/cron.d/
     destination: /etc/cron.d
     runas: root
+permissions:
+  - object: /etc/cron.d
+    pattern: "*"
+    owner: root
+    group: root
+    mode: 644
+    type:
+      - file
 hooks:
   BeforeInstall:
       - location: server_configs/scripts/before_install.sh
