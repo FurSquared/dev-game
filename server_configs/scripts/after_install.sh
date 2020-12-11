@@ -17,5 +17,9 @@ sudo ln -sf /etc/nginx/sites-available/f2game.conf /etc/nginx/sites-enabled
 
 # Restart services
 systemctl daemon-reload
+
+sudo systemctl enable gunicorn
+sudo systemctl enable nginx
+
 sudo systemctl restart gunicorn
 sudo systemctl restart nginx
