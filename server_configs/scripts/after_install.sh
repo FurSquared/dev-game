@@ -16,7 +16,7 @@ sudo chown -R www-data:www-data /var/www/
 sudo ln -sf /etc/nginx/sites-available/f2game.conf /etc/nginx/sites-enabled
 
 # Run certbot
-sudo certbot --nginx
+sudo certbot --nginx -n --agree-tos --email webmaster@fursquared.com --domains con.glomerate.co
 
 # Restart services
 systemctl daemon-reload
