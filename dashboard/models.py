@@ -1,9 +1,14 @@
+import pytz
+from django.utils import timezone
+
 from django.db import models
 from django.core.validators import RegexValidator
 from django.conf import settings
 from django.utils import timezone
 
 alphanumeric_validator = RegexValidator(r'^[0-9a-zA-Z_-]*$', 'Only alphanumeric, underscore, and dash are allowed.')
+
+TIME_ZONE_OBJ = pytz.timezone(settings.TIME_ZONE)
 
 
 class Token(models.Model):
@@ -14,6 +19,22 @@ class Token(models.Model):
     gm_note = models.TextField(blank=True)
     reward_text = models.TextField(blank=True)
     valid_from = models.DateTimeField(blank=True, null=True)
+
+    def is_valid(self):
+        if self.valid_from and self.valid_from > timezone.now():
+            return False, self.valid_from
+
+        return True, self.valid_from
+
+
+    @property
+    def user_reward(self):
+        is_valid, date = self.is_valid()
+        if is_valid:
+            return self.reward_text
+
+        date_str = date.astimezone(TIME_ZONE_OBJ).strftime('%b %d, %Y @ %H:%M:%S')
+        return f"This reward unlocks at {date_str}"
 
     def save(self, *args, **kwargs):
         self.code = self.code.upper().replace("-", "_")
@@ -66,6 +87,29 @@ class Reward(models.Model):
     valid_from = models.DateTimeField(blank=True, null=True)
     gm_note = models.TextField(blank=True)
     reward_text = models.TextField(blank=True)
+
+    def is_valid(self):
+        if self.valid_from and self.valid_from > timezone.now():
+            return False, self.valid_from
+
+        for token in self.required_tokens.all():
+            is_valid, date = token.is_valid()
+            if not is_valid:
+                return False, date
+
+        return True, self.valid_from
+
+
+    @property
+    def user_reward(self):
+        is_valid, date = self.is_valid()
+
+        if is_valid:
+            return self.reward_text
+
+        date_str = date.astimezone(TIME_ZONE_OBJ).strftime('%b %d, %Y @ %H:%M:%S')
+        return f"This reward unlocks at {date_str}"
+
 
     class Meta:
         indexes = [
