@@ -20,20 +20,20 @@ class Token(models.Model):
     reward_text = models.TextField(blank=True)
     valid_from = models.DateTimeField(blank=True, null=True)
 
-    @property
     def is_valid(self):
         if self.valid_from and self.valid_from > timezone.now():
-            return False
+            return False, self.valid_from
 
-        return True
+        return True, self.valid_from
 
 
     @property
     def user_reward(self):
-        if self.is_valid:
+        is_valid, date = self.is_valid()
+        if is_valid:
             return self.reward_text
 
-        date_str = self.valid_from.astimezone(TIME_ZONE_OBJ).strftime('%b %d, %Y @ %H:%M:%S')
+        date_str = date.astimezone(TIME_ZONE_OBJ).strftime('%b %d, %Y @ %H:%M:%S')
         return f"This reward unlocks at {date_str}"
 
     def save(self, *args, **kwargs):
@@ -93,8 +93,9 @@ class Reward(models.Model):
             return False, self.valid_from
 
         for token in self.required_tokens.all():
-            if not token.is_valid:
-                return False, token.valid_from
+            is_valid, date = token.is_valid()
+            if not is_valid:
+                return False, date
 
         return True, self.valid_from
 
