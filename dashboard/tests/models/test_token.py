@@ -1,7 +1,14 @@
+import pytz
+
+from datetime import timedelta
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.utils import timezone
 
 from dashboard.models import Token
+
+TIME_ZONE_OBJ = pytz.timezone(settings.TIME_ZONE)
 
 
 class TokenTests(TestCase):
@@ -24,3 +31,15 @@ class TokenTests(TestCase):
         with self.assertRaises(ValidationError):
             token = Token(code="bl%ah", reward_text="A Reward!")
             token.full_clean()
+
+    def test_code_date_before(self):
+        token = Token.objects.get(code="GM_REWARD_DATE")
+        token.valid_from = timezone.now() + timedelta(hours=2)
+        token.save()
+
+        self.assertEqual(token.user_reward.find("This reward unlocks at "), 0)
+
+    def test_code_date_after(self):
+        token = Token.objects.get(code="GM_REWARD_DATE")
+
+        self.assertEqual(token.user_reward, "rawr")
