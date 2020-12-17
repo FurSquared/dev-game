@@ -1,0 +1,27 @@
+{% extends "base_with_nav.html" %}
+{% block title %}Main{% endblock %}
+{% block content %}
+
+<div margin="0" class="box-in-left">
+  <h1>Upload a CSV file with codes:</h1>
+  <form action="/dashboard/upload_codes" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" class="input-block-level form-signin" name="csvfile" autofocus autocapitalize="none" autocomplete="csvfile" required id="csvfile" placeholder="CSV File">
+    <button class="btn btn-large btn-primary" type="submit" value="login">Submit</button>
+  </form>
+</div>
+
+<h1>New Codes</h1>
+<ul>
+  {% for token in new_codes %}
+  <li><b>{{ token.code }}: </b> {{ token.gm_note }} | {{ token.reward_text }} | {{ token.valid_from }}</li>
+  {% endfor %}
+</ul>
+<h1>Updated Codes</h1>
+<ul>
+  {% for token in updated_codes %}
+  <li><b>{{ token.code }}: </b> {{ token.gm_note }} | {{ token.reward_text }} | {{ token.valid_from }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}
+
