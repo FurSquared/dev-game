@@ -2,8 +2,10 @@
 {% block title %}Main{% endblock %}
 {% block content %}
 
+<h1>{{ title }}</h1>
+
 <div margin="0" class="box-in-left">
-  <h1>Upload a CSV file with codes:</h1>
+  <h1>Upload a CSV file:</h1>
   <form action="/dashboard/upload_codes" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="file" class="input-block-level form-signin" name="csvfile" autofocus autocapitalize="none" autocomplete="csvfile" required id="csvfile" placeholder="CSV File">
@@ -11,17 +13,15 @@
   </form>
 </div>
 
-<h1>New Codes</h1>
+{% for section in sections %}
+<h1>{{ section.title }}</h1>
 <ul>
-  {% for token in new_codes %}
-  <li><b>{{ token.code }}: </b> {{ token.gm_note }} | {{ token.reward_text }} | {{ token.valid_from }}</li>
+  <b><u>{{ heading }}</u></b>
+  {% for value in section.values %}
+  <li>{{ value }}</li>
   {% endfor %}
 </ul>
-<h1>Updated Codes</h1>
-<ul>
-  {% for token in updated_codes %}
-  <li><b>{{ token.code }}: </b> {{ token.gm_note }} | {{ token.reward_text }} | {{ token.valid_from }}</li>
-  {% endfor %}
-</ul>
+{% endfor %}
+
 {% endblock %}
 
