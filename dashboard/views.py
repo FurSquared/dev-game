@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from dashboard.models import CollectedReward, CollectedToken, Token
+from dashboard.models import CollectedReward, CollectedToken, Token, Reward
 
 
 @login_required
@@ -116,12 +116,12 @@ class UploadRewardsView(View):
         decoded_file = request.FILES['csvfile'].read().decode('UTF-8').splitlines()
         reader = csv.DictReader(decoded_file)
 
-        keys = ['name', 'gm_note count', 'required_tokens', 'reward_text', 'valid_from']
+        keys = ['name', 'gm_note', 'count', 'required_tokens', 'reward_text', 'valid_from']
         new_rewards = []
         updated_rewards = []
         for row in reader:
             valid_from = None if len(row['valid_from']) == 0 else row['valid_from']
-            required_tokens = [item.strip() for item in row['required_tokens'].split(',')]
+            required_tokens = [item.strip() for item in row['required_tokens'].split(',')] if len(row['required_tokens']) > 0 else []
 
             reward, created = Reward.objects.get_or_create(
                 name=row['name'],
@@ -129,15 +129,16 @@ class UploadRewardsView(View):
                     'gm_note': row['gm_note'],
                     'reward_text': row['reward_text'],
                     'valid_from': valid_from,
-                    'count': row['count'],
-                    'required_tokens': required_tokens,
+                    'count': int(row['count']) if len(row['count']) > 0 else 0,
                 }
             )
 
             if created:
-                new_rewards.append(' | '.join([str(getattr(token, key)) for key in keys]))
+                reward.required_tokens.set(required_tokens)
+                reward.save()
+                new_rewards.append(' | '.join([str(getattr(reward, key)) for key in keys]))
             else:
-                updated_rewards.append(' | '.join([str(getattr(token, key)) for key in keys]))
+                updated_rewards.append(' | '.join([str(getattr(reward, key)) for key in keys]))
 
         context = {
             'title': 'Upload Rewards',
@@ -145,11 +146,11 @@ class UploadRewardsView(View):
             'sections': [
                 {
                     'title': 'New Rewards',
-                    'values': new_codes,
+                    'values': new_rewards,
                 },
                 {
                     'title': 'Updated Rewards',
-                    'values': updated_codes,
+                    'values': updated_rewards,
                 },
             ]
         }

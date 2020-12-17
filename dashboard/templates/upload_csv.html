@@ -6,7 +6,7 @@
 
 <div margin="0" class="box-in-left">
   <h1>Upload a CSV file:</h1>
-  <form action="/dashboard/upload_codes" method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="file" class="input-block-level form-signin" name="csvfile" autofocus autocapitalize="none" autocomplete="csvfile" required id="csvfile" placeholder="CSV File">
     <button class="btn btn-large btn-primary" type="submit" value="login">Submit</button>
