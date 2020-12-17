@@ -24,8 +24,8 @@ class SignupView(View):
         form = UserCreationForm(request.POST)
         try:
             validate_email(form.data['username'])
-        except ValidationError:
-            form.add_error('username', 'Username must be an email address!')
+        except ValidationError as e:
+            form.add_error('username', e)
 
         if form.is_valid():
             form.save()
