@@ -10,6 +10,7 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
 
+from dashboard.domain import process_csv_codes
 from dashboard.models import CollectedReward, CollectedToken, Token, Reward
 
 
@@ -86,26 +87,7 @@ class UploadCodesView(View):
         decoded_file = request.FILES['csvfile'].read().decode('UTF-8').splitlines()
         reader = csv.DictReader(decoded_file)
 
-        keys = ['code', 'gm_note', 'reward_text', 'valid_from']
-        new_codes = []
-        updated_codes = []
-        for row in reader:
-            valid_from = None if len(row['valid_from']) == 0 else row['valid_from']
-
-            token, created = Token.objects.get_or_create(
-                code=row['code'],
-                defaults={
-                    'gm_note': row['gm_note'],
-                    'reward_text': row['reward_text'],
-                    'valid_from': valid_from,
-                }
-            )
-
-            if created:
-                new_codes.append(' | '.join([str(getattr(token, key)) for key in keys]))
-            else:
-                updated_codes.append(' | '.join([str(getattr(token, key)) for key in keys]))
-
+        keys, new_codes, updated_codes = process_csv_codes(reader)
 
         context = {
             'title': 'Upload Codes',
@@ -144,29 +126,7 @@ class UploadRewardsView(View):
         decoded_file = request.FILES['csvfile'].read().decode('UTF-8').splitlines()
         reader = csv.DictReader(decoded_file)
 
-        keys = ['name', 'gm_note', 'count', 'required_tokens', 'reward_text', 'valid_from']
-        new_rewards = []
-        updated_rewards = []
-        for row in reader:
-            valid_from = None if len(row['valid_from']) == 0 else row['valid_from']
-            required_tokens = [item.strip() for item in row['required_tokens'].split(',')] if len(row['required_tokens']) > 0 else []
-
-            reward, created = Reward.objects.get_or_create(
-                name=row['name'],
-                defaults={
-                    'gm_note': row['gm_note'],
-                    'reward_text': row['reward_text'],
-                    'valid_from': valid_from,
-                    'count': int(row['count']) if len(row['count']) > 0 else 0,
-                }
-            )
-
-            if created:
-                reward.required_tokens.set(required_tokens)
-                reward.save()
-                new_rewards.append(' | '.join([str(getattr(reward, key)) for key in keys]))
-            else:
-                updated_rewards.append(' | '.join([str(getattr(reward, key)) for key in keys]))
+        keys, new_rewards, updated_rewards = process_csv_rewards(reader)
 
         context = {
             'title': 'Upload Rewards',
