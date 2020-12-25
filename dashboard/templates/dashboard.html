@@ -14,14 +14,14 @@
 <h1>Retrieved Codes</h1>
 <ul>
   {% for token in collected_tokens %}
-  <li><b>{{ token.token.code }}: </b> {{ token.token.user_reward }}</li>
+  <li><b>{{ token.token.code }}: </b> {{ token.token.user_reward |safe }}</li>
   {% endfor %}
 </ul>
 
 <h1>Rewards</h1>
 <ul>
   {% for reward in collected_rewards %}
-  <li><b>{{ reward.reward.name }}: </b> {{ reward.reward.user_reward }}</li>
+  <li><b>{{ reward.reward.name }}: </b> {{ reward.reward.user_reward |safe }}</li>
   {% endfor %}
 </ul>
 
