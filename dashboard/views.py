@@ -19,6 +19,13 @@ class SignupView(View):
     def get(self, request, *args, **kwargs):
         form = UserCreationForm()
 
+        # This is odd, but we're using email as the username
+        # And this keeps historic data inline. Just relabeling the default field
+        # to "email."  Email-address is correctly validated below.
+        # If we rebuild this next year, we should go with a custom user creation
+        # form.
+        form.fields['username'].label = "Email Address"
+
         return render(request, 'signup.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -37,6 +44,7 @@ class SignupView(View):
             return redirect('index')
 
         return render(request, 'signup.html', {'form': form})
+
 
 @login_required
 def index(request):
@@ -66,6 +74,7 @@ class EnterCodeView(View):
 
         return redirect("index")
 
+
 class UploadCodesView(View):
 
     @method_decorator(login_required)
@@ -77,7 +86,6 @@ class UploadCodesView(View):
             'title': 'Upload Codes',
         }
         return render(request, 'upload_csv.html', context)
-
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -105,6 +113,7 @@ class UploadCodesView(View):
         }
         return render(request, 'upload_csv.html', context)
 
+
 class UploadRewardsView(View):
 
     @method_decorator(login_required)
@@ -116,7 +125,6 @@ class UploadRewardsView(View):
             'title': 'Upload Rewards',
         }
         return render(request, 'upload_csv.html', context)
-
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
