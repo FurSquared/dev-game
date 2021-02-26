@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from dashboard.domain import process_csv_codes
+from dashboard.domain import process_csv_codes, process_csv_rewards
 from dashboard.models import CollectedReward, CollectedToken, Token, Reward
 
 
