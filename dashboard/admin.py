@@ -10,7 +10,7 @@ class TokenAdmin(admin.ModelAdmin):
 
 @admin.register(CollectedToken)
 class CollectedTokenAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__str__', 'collected_at',)
 
 
 @admin.register(Reward)
@@ -20,4 +20,4 @@ class RewardAdmin(admin.ModelAdmin):
 
 @admin.register(CollectedReward)
 class CollectedRewardAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__str__', 'collected_at',)
