@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block page_title %}Login{% endblock %}
+{% block page_content %}
+
+<div class="container"><div class="box-in">
+  {% if form.errors %}
+    <p>Your email and password didn't match. Please try again.</p>
+  {% endif %}
+
+  {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+  {% else %}
+    <h2 class="form-signin-heading">Please login to the game.</h2>
+  {% endif %}
+</div></div>
+
+    <div class="container">
+      <form class="form-signin" method="post" action="{% url 'login' %}">
+        <input type="text" class="input-block-level" name="username" autofocus autocapitalize="none" autocomplete="email" maxlength="150" required id="id_username" placeholder="Email">
+        <input type="password" class="input-block-level" name="password" autocomplete="current-password" required id="id_password" placeholder="Password">
+        <button class="btn btn-large btn-primary" type="submit" value="login">Sign in</button>
+        <input type="hidden" name="next" value="/dashboard/" />
+        {% csrf_token %}
+      </form>
+    </div>
+
+  <div class="container"><div class="box-in">
+    <a href="{% url 'signup' %}">Create Account</a>
+  </div>
+</div>
+  <div class="container"><div class="box-in">
+    <a href="{% url 'password_reset' %}">Lost password?</a>
+  </div>
+</div>
+
+{% endblock %}

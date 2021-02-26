@@ -1,0 +1,24 @@
+- model: dashboard.token
+  pk: REWARD_ONLY
+  fields:
+    gm_note: ''
+    reward_text: another reward
+    valid_from: null
+- model: dashboard.token
+  pk: GM_REWARD_DATE
+  fields:
+    gm_note: barf
+    reward_text: rawr
+    valid_from: 2020-11-28 00:57:03+00:00
+- model: dashboard.token
+  pk: GM_ONLY
+  fields:
+    gm_note: another note
+    reward_text: ''
+    valid_from: null
+- model: dashboard.token
+  pk: GM_REWARD
+  fields:
+    gm_note: a note
+    reward_text: a reward
+    valid_from: null
