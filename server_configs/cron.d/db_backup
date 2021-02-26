@@ -1,2 +1,0 @@
-0 12 * * * www-data aws s3 cp /var/www/prod_resources/*.sqlite3 s3://arg-prod-db-backups
-
