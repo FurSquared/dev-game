@@ -45,9 +45,11 @@ class SignupView(View):
 
         return render(request, 'signup.html', {'form': form})
 
-
-@login_required
+# Hacky deactivation of game
+#@login_required
 def index(request):
+    # Hacky deactivation of game
+    return redirect('https://fursquared.com')
     data = {
         'user': request.user,
         'collected_tokens': CollectedToken.objects.filter(user=request.user),
